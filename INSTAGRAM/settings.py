@@ -25,7 +25,7 @@ SECRET_KEY = '#9-%%7f-3l1ka5xs-3w+l$!vhf%39k9&q^@avn258+jxa%#mtl'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://last-ksj0206.c9users.io/']
+ALLOWED_HOSTS = ['last-ksj0206.c9users.io/']
 
 
 # Application definition
@@ -102,6 +102,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
+# 한글/서울 로캐일로 변경
 
 LANGUAGE_CODE = 'ko-kr'
 
