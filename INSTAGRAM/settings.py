@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ['last-ksj0206.c9users.io']
 # Application definition
 
 INSTALLED_APPS = [
+    'bootstrap4',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -38,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'posts',
+    
 ]
 
 MIDDLEWARE = [
