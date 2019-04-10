@@ -37,3 +37,24 @@ def delete(request, post_id):
     post.delete()
     return redirect('posts:list')
     
+def update(request, post_id):
+    
+    post = Post.objects.get(pk=post_id)
+    
+    # POST 요청일 때
+    if request.method == "POST":
+        # 수정내용 DB에 반영
+        form = PostModelForm(request.POST, instance=post) # 여기가 create 이랑 다른점
+        if form.is_valid():
+            form.save()
+            return redirect('posts:list') # 디테일 아직 없으니까 일단 list
+    
+    # GET 요청일 때
+    else:
+        # 수정 내용 편집
+        form = PostModelForm(instance=post) # 요로케 넘겨야 value 뜸
+        context = {
+            'form' : form,
+        }
+        return render(request, 'posts/update.html', context)
+    

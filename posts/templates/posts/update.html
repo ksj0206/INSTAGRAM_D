@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block body %}
+<h1>수정 하기</h1>
+<form method="POST"> <!--액션 줄 필요는 없다-->
+  {% csrf_token %}
+  {% bootstrap_form form %}
+  {% buttons %}
+    <button type="submit" class="btn btn-primary">업로드</button>
+  {% endbuttons %}
+</form>
+{% endblock %}
