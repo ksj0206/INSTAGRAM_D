@@ -11,7 +11,9 @@ def create(request):
         form = PostModelForm(request.POST, request.FILES) # 모델폼으로 넘어온 데이터를 정리
         
         if form.is_valid(): # 유효성 검사
-            form.save() # 통과되면 저장
+            post = form.save(commit=False) # save는 하고 db에 저장은 하지 마라
+            post.user = request.user # 객체를 때려박아도 장고가 알아서 id 만 따와서 들어간다.
+            post.save()
             return redirect('posts:list') # 일단은 리다렉
         
     
