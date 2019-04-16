@@ -21,6 +21,7 @@ from django.conf import settings # 관례
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('posts/',include('posts.urls')),
+    path('accounts/',include('accounts.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) # 관례임
