@@ -48,3 +48,11 @@ def profile(request, username):
         'profile':profile
     }
     return render(request,'accounts/profile.html',context)
+    
+def delete(request):
+    # POST -> 계정을 삭제한다. == DB에서 user를 삭제한다.
+    if request.method == "POST":
+        request.user.delete()
+        return redirect('accounts:signup')
+    # GET -> 진짜 삭제하시겠습니까?
+    return render(request,'accounts/delete.html')
