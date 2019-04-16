@@ -17,11 +17,15 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings # 관례
+from accounts import views as accounts_views # 관례
+from posts import views  as posts_views 
 
 urlpatterns = [
+    path('',posts_views.list, name="root"),
     path('admin/', admin.site.urls),
     path('posts/',include('posts.urls')),
     path('accounts/',include('accounts.urls')),
+    path('<str:username>/', accounts_views.profile, name="profile"), # 이번엔 다른 보조에게 넘기지 말고 바로
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) # 관례임

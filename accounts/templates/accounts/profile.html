@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block body %}
+  <h1>{{ profile.username }}</h1>
+    <div class="row">
+      {% for post in profile.post_set.all %}
+        <div class="col-4">
+            <img src="{{ post.image.url }}" class="img-fluid">
+            <h5>{{ post.content }}</h5>
+        </div>
+      {% endfor %}
+    </div>
+{% endblock %}
