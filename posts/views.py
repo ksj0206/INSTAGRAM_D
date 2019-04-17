@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import PostModelForm, CommentForm
 from .models import Post, Comment
-
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+@login_required
 def create(request):
     
     # 만약, POST 요청이 오면
@@ -26,10 +27,18 @@ def create(request):
             'form':form
         }
         return render(request,'posts/create.html',context)
-        
+
+@login_required
 def list(request):
-    # 모든 Post를 보여줌.
-    posts = Post.objects.all()
+    # 접속한 유저가 팔로잉한 유저들의 Post만 보여준다.
+    # 동영 ver.
+    # posts = []
+    # for following in request.user.followings.all():
+    #     posts.extend(Post.objects.filter(user=follwing))
+    # 요거는 속도가 좀 안날 수도 있다.
+    # 항상 데이터 찾는거는 DB에 시키자.
+    # 쌤 ver.
+    posts = Post.objects.filter(user__in=request.user.followings.values('id')).order_by('-pk')
     
     comment_form = CommentForm()
     context = {
@@ -37,7 +46,8 @@ def list(request):
         'comment_form':comment_form,
     }
     return render(request,'posts/list.html',context)
-    
+
+@login_required
 def delete(request, post_id):
     post = Post.get_object_or_404.get(Post,pk=post_id)
     
@@ -46,7 +56,8 @@ def delete(request, post_id):
     
     post.delete()
     return redirect('posts:list')
-    
+
+@login_required
 def update(request, post_id):
     
     post = Post.get_object_or_404.get(Post,pk=post_id)
@@ -70,7 +81,8 @@ def update(request, post_id):
             'form' : form,
         }
         return render(request, 'posts/update.html', context)
-    
+
+@login_required
 def create_comments(request, post_id):
     comment_form = CommentForm(request.POST)
     
@@ -81,7 +93,7 @@ def create_comments(request, post_id):
         comment.save()
         return redirect('posts:list')
         
-        
+@login_required
 def like(request,post_id):
     # 특정 유저가 특정 포스트를 좋아요 할 때
     post = get_object_or_404(Post,id=post_id) # 특정 유저는 request.user로 들어올 것.. 
