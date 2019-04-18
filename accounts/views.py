@@ -5,6 +5,8 @@ from django.contrib.auth import logout as auth_logout
 from django.contrib.auth import get_user_model
 from .forms import CustomUserCreationForm
 from django.contrib.auth.decorators import login_required
+from .models import Profile
+from .forms import ProfileForm
 
 # Create your views here.
 def signup(request):
@@ -13,6 +15,8 @@ def signup(request):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid(): # 야 폼아 혹시 넘어온 데이터 괜찮닝
             user = form.save() # 방금 가입한 유저
+            # 가입된 유저의 Profile 레코드 함께 생성
+            Profile.objects.create(user=user) # 이렇게 하면 다른 필드는 비었지만 user 만 채워진 프로필 모델이 생긴다.
             auth_login(request,user)
         return redirect('posts:list')
     else:
@@ -73,4 +77,17 @@ def follow(request, user_id): # 내가 팔로우 할 사람이 넘어 온다.
         person.followers.add(request.user)
     return redirect('profile',person.username)
     
-    
+@login_required
+def change_profile(request):
+    # 프로필 정보 수정
+    if request.method == "POST":
+        profile_form = ProfileForm(data=request.POST,instance=request.user.profile,files=request.FILES) # 뒤에것이 수정 대상 앞에것이 수정에 들어갈 데이터
+        if profile_form.is_valid():
+            profile_form.save()
+            return redirect('profile',request.user.username)
+    else:
+        profile_form = ProfileForm(instance=request.user.profile) # 장고 똑똑해서 1:1은 profile_set 이 아니라 걍 단수로. 굿.
+        context = {
+            'profile_form' : profile_form
+        }
+        return render(request, 'accounts/change_profile.html',context)

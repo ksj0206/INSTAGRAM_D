@@ -1,22 +1,46 @@
 {% extends 'base.html' %}
+
 {% block body %}
-  <h1>{{ profile.username }} 
-  {% if user != profile %}
-    {% if user in profile.followers.all %}
-      | <a class="btn btn-danger" href="{% url 'accounts:follow' profile.id %}">언팔</a></h1> 
-    {% else %}
-      | <a class="btn btn-info" href="{% url 'accounts:follow' profile.id %}">팔</a></h1> 
-    {% endif %}
-  {% endif %}
-  {% if user == profile %}
-  <a class="btn btn-danger" href="{% url 'accounts:delete' %}">회원탈퇴</a> <!--추가-->
-  {% endif %}
-    <div class="row">
-      {% for post in profile.post_set.all %}
-        <div class="col-4">
-            <img src="{{ post.image.url }}" class="img-fluid">
-            <h5>{{ post.content }}</h5>
-        </div>
-      {% endfor %}
-    </div>
+ <div class="row">
+   <div class="col-3">
+     {% if profile.profile.image %}
+       <img src="{{ profile.profile.image.url }}" class="rounded-circle">
+     {% else %}
+       <i class="fas fa-user-circle fa-10x"></i>
+     {% endif %}
+     <h1>{{ profile.username }}
+       {% if user != profile %}
+         {% if user in profile.followers.all %}
+           <a class="btn btn-dark" href="{% url 'accounts:follow' profile.id %}">언팔로우</a>
+         {% else %}
+           <a class="btn btn-primary" href="{% url 'accounts:follow' profile.id %}">팔로우</a>
+         {% endif %}
+       {% endif %}
+     </h1>
+   </div>
+   <div class="col-9">
+     <div>
+       <strong>{{ profile.profile.nickname }}</strong>
+     </div>
+     <div>
+       {{ profile.profile.description }}
+     </div>
+   </div>
+ </div>
+
+ {% if user == profile %}
+   <a class="btn btn-danger" href="{% url 'accounts:delete' %}">회원탈퇴</a>
+   <a class="btn btn-info" href="{% url 'accounts:change_profile' %}">프로필 변경</a>
+ {% endif %}
+
+
+ <div class="row">
+   <!-- 해당 유저가 작성한 모든 post를 보여줌 -->
+   {% for post in profile.post_set.all %}
+     <div class="col-4">
+       <img src="{{ post.image.url }}" class="image-fluid" alt="...">
+     </div>
+   {% endfor %}
+
+ </div>
 {% endblock %}
